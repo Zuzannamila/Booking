@@ -1,7 +1,5 @@
-﻿namespace Booking.Models
-{
-    public class GlobalUsings
-    {
+﻿global using Booking.Models.Entities.Owned;
 
-    }
-}
+global using System.ComponentModel;
+global using System.ComponentModel.DataAnnotations;
+global using System.ComponentModel.DataAnnotations.Schema;
