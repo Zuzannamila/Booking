@@ -56,31 +56,6 @@ public class ApplicationDbContext : DbContext
         }
     }
 
-    //public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    //{
-    //    try
-    //    {
-    //        UpdateTimeStamp();
-    //        return base.SaveChangesAsync(cancellationToken);
-    //    }
-    //    catch (DbUpdateConcurrencyException ex)
-    //    {
-    //        throw new CustomConcurrencyException("A concurrency exception happend", ex);
-    //    }
-    //    catch (RetryLimitExceededException ex)
-    //    {
-    //        throw new CustomRetryLimitExceededException("There is a problem with SQL Server", ex);
-    //    }
-    //    catch (DbUpdateException ex)
-    //    {
-    //        throw new CustomDbUpdateException("An error occured updating database", ex);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        throw new CustomException("An error occured updating database", ex);
-    //    }
-    //}
-
     private void UpdateTimeStamp()
     {
         var now = DateTimeOffset.UtcNow;
