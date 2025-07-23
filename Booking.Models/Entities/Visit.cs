@@ -4,7 +4,7 @@ public class Visit : BaseEntity
 {
     public DateTimeOffset Start { get; set; }
     public DateTimeOffset End { get; set; }
-    public BookingStatus Status { get; set; } = BookingStatus.Pending;
+    public VisitStatus Status { get; set; } = VisitStatus.Pending;
 
     public Guid VenueId { get; set; }
     [ForeignKey(nameof(VenueId))]

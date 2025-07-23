@@ -1,6 +1,6 @@
 ﻿namespace Booking.Models.Entities.Enums;
 
-public enum BookingStatus : byte
+public enum VisitStatus : byte
 {
     Pending = 0,
     Confirmed = 1,
