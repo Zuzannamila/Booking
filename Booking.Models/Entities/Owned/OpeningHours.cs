@@ -1,5 +1,6 @@
 ﻿namespace Booking.Models.Entities.Owned;
 
+[Owned]
 public class OpeningHours
 {
     public DayOfWeek Day { get; set; }

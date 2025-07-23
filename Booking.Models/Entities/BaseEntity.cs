@@ -2,7 +2,10 @@
 
 public class BaseEntity
 {
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Key]
     public Guid Id { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset UpdatedAt { get; set; }
+    [Timestamp]
+    public byte[] Timestamp { get; set; } = null!;
 }
