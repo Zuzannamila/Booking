@@ -1,5 +1,6 @@
 ﻿namespace Booking.Models.Entities;
 
+[Table("Visits", Schema = "dbo")]
 public class Visit : BaseEntity
 {
     public DateTimeOffset Start { get; set; }

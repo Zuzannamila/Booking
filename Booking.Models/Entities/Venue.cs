@@ -1,5 +1,6 @@
 ﻿namespace Booking.Models.Entities;
 
+[Table("Venues", Schema = "dbo")]
 public class Venue : BaseEntity
 {
     public string Name { get; set; } = null!;
@@ -15,12 +16,4 @@ public class Venue : BaseEntity
 
     public virtual ICollection<VenuePhoto> VenuePhotos { get; set; } = new List<VenuePhoto>();
     public virtual ICollection<OpeningHours> OpeningHours { get; set; } = new List<OpeningHours>();
-
-    public bool IsDeleted { get; private set; }
-    public DateTime? DeletedAt { get; private set; }
-    public void SoftDelete()
-    {
-        IsDeleted = true;
-        DeletedAt = DateTime.UtcNow;
-    }
 }

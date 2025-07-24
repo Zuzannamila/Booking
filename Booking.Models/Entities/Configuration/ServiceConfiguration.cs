@@ -11,7 +11,5 @@ public class ServiceConfiguration : IEntityTypeConfiguration<Service>
 
         builder.Property(p => p.Price)
             .HasColumnType("decimal(18,2)");
-
-        builder.HasQueryFilter(s => !s.IsDeleted);
     }
 }

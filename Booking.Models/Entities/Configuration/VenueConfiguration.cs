@@ -4,16 +4,15 @@ public class VenueConfiguration : IEntityTypeConfiguration<Venue>
 {
     public void Configure(EntityTypeBuilder<Venue> builder)
     {
-        builder.OwnsOne(v => v.AddressInformation, a =>
-        {
-            a.ToTable("Adresses");
-        });
+        builder.OwnsOne(v => v.AddressInformation);
 
         builder.OwnsMany(v => v.VenuePhotos, p =>
         {
             p.ToTable("Photos");
         });
-
-        builder.HasQueryFilter(v => !v.IsDeleted);
+        builder.OwnsMany(v => v.OpeningHours, p =>
+        {
+            p.ToTable("OpeningHours");
+        });
     }
 }

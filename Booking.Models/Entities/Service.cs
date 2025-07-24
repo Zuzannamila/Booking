@@ -1,5 +1,6 @@
 ﻿namespace Booking.Models.Entities;
 
+[Table("Services", Schema = "dbo")]
 public class Service : BaseEntity
 {
     public string Name { get; set; } = null!;
@@ -10,12 +11,4 @@ public class Service : BaseEntity
     public Guid VenueId { get; set; }
     [ForeignKey(nameof(VenueId))]
     public Venue VenueNavigation { get; set; } = null!;
-
-    public bool IsDeleted { get; private set; }
-    public DateTime? DeletedAt { get; private set; }
-    public void SoftDelete()
-    {
-        IsDeleted = true;
-        DeletedAt = DateTime.UtcNow;
-    }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Dal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250723120657_InitialCreate")]
+    [Migration("20250724193915_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -37,10 +37,8 @@ namespace Booking.Dal.Migrations
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -53,11 +51,9 @@ namespace Booking.Dal.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BaseEntity");
+                    b.ToTable((string)null);
 
-                    b.HasDiscriminator().HasValue("BaseEntity");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTpcMappingStrategy();
                 });
 
             modelBuilder.Entity("Booking.Models.Entities.Client", b =>
@@ -66,8 +62,8 @@ namespace Booking.Dal.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(320)
+                        .HasColumnType("nvarchar(320)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -82,7 +78,7 @@ namespace Booking.Dal.Migrations
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
 
-                    b.HasDiscriminator().HasValue("Client");
+                    b.ToTable("Clients", "dbo");
                 });
 
             modelBuilder.Entity("Booking.Models.Entities.Employee", b =>
@@ -94,19 +90,16 @@ namespace Booking.Dal.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("PhotoUrl")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<Guid>("VenueId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("VenueId");
 
-                    b.HasDiscriminator().HasValue("Employee");
+                    b.ToTable("Employees", "dbo");
                 });
 
             modelBuilder.Entity("Booking.Models.Entities.Service", b =>
@@ -119,9 +112,6 @@ namespace Booking.Dal.Migrations
 
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("time");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -136,24 +126,12 @@ namespace Booking.Dal.Migrations
 
                     b.HasIndex("VenueId");
 
-                    b.ToTable("BaseEntity", t =>
-                        {
-                            t.Property("IsDeleted")
-                                .HasColumnName("Service_IsDeleted");
-
-                            t.Property("VenueId")
-                                .HasColumnName("Service_VenueId");
-                        });
-
-                    b.HasDiscriminator().HasValue("Service");
+                    b.ToTable("Services", "dbo");
                 });
 
             modelBuilder.Entity("Booking.Models.Entities.Venue", b =>
                 {
                     b.HasBaseType("Booking.Models.Entities.BaseEntity");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
@@ -166,16 +144,7 @@ namespace Booking.Dal.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.ToTable("BaseEntity", t =>
-                        {
-                            t.Property("IsDeleted")
-                                .HasColumnName("Venue_IsDeleted");
-
-                            t.Property("Name")
-                                .HasColumnName("Venue_Name");
-                        });
-
-                    b.HasDiscriminator().HasValue("Venue");
+                    b.ToTable("Venues", "dbo");
                 });
 
             modelBuilder.Entity("Booking.Models.Entities.Visit", b =>
@@ -211,13 +180,7 @@ namespace Booking.Dal.Migrations
 
                     b.HasIndex("VenueId");
 
-                    b.ToTable("BaseEntity", t =>
-                        {
-                            t.Property("VenueId")
-                                .HasColumnName("Visit_VenueId");
-                        });
-
-                    b.HasDiscriminator().HasValue("Visit");
+                    b.ToTable("Visits", "dbo");
                 });
 
             modelBuilder.Entity("Booking.Models.Entities.Employee", b =>
@@ -241,7 +204,7 @@ namespace Booking.Dal.Migrations
 
                             b1.HasKey("EmployeeId", "Id");
 
-                            b1.ToTable("EmployeeSchedule");
+                            b1.ToTable("EmployeeSchedules", "dbo");
 
                             b1.WithOwner()
                                 .HasForeignKey("EmployeeId");
@@ -265,7 +228,7 @@ namespace Booking.Dal.Migrations
 
                                     b2.HasKey("EmployeeScheduleEmployeeId", "EmployeeScheduleId");
 
-                                    b2.ToTable("EmployeeSchedule");
+                                    b2.ToTable("EmployeeSchedules", "dbo");
 
                                     b2.WithOwner()
                                         .HasForeignKey("EmployeeScheduleEmployeeId", "EmployeeScheduleId");
@@ -324,16 +287,9 @@ namespace Booking.Dal.Migrations
                             b1.Property<int>("Unit")
                                 .HasColumnType("int");
 
-                            b1.Property<byte[]>("_TableSharingConcurrencyTokenConvention_Timestamp")
-                                .IsConcurrencyToken()
-                                .IsRequired()
-                                .ValueGeneratedOnAddOrUpdate()
-                                .HasColumnType("rowversion")
-                                .HasColumnName("Timestamp");
-
                             b1.HasKey("VenueId");
 
-                            b1.ToTable("BaseEntity");
+                            b1.ToTable("Addresses", "dbo");
 
                             b1.WithOwner()
                                 .HasForeignKey("VenueId");
@@ -368,7 +324,7 @@ namespace Booking.Dal.Migrations
 
                             b1.HasKey("VenueId", "Id");
 
-                            b1.ToTable("VenuePhoto");
+                            b1.ToTable("Photos", "dbo");
 
                             b1.WithOwner()
                                 .HasForeignKey("VenueId");
@@ -396,7 +352,7 @@ namespace Booking.Dal.Migrations
 
                             b1.HasKey("VenueId", "Id");
 
-                            b1.ToTable("BaseEntity_OpeningHours");
+                            b1.ToTable("Venues_OpeningHours", "dbo");
 
                             b1.WithOwner()
                                 .HasForeignKey("VenueId");
@@ -420,18 +376,19 @@ namespace Booking.Dal.Migrations
 
                     b.HasOne("Booking.Models.Entities.Employee", "EmployeeNavigation")
                         .WithMany()
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Booking.Models.Entities.Service", "ServiceNavigation")
                         .WithMany()
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Booking.Models.Entities.Venue", "VenueNavigation")
                         .WithMany()
                         .HasForeignKey("VenueId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ClientNavigation");

@@ -16,7 +16,5 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         {
             s.ToTable("EmployeeSchedules");
         });
-
-        builder.HasQueryFilter(e => !e.IsDeleted);
     }
 }

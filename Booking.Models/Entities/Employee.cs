@@ -1,5 +1,6 @@
 ﻿namespace Booking.Models.Entities;
 
+[Table("Employees", Schema = "dbo")]
 public class Employee : BaseEntity
 {
     public string FullName { get; set; } = null!;
@@ -11,12 +12,4 @@ public class Employee : BaseEntity
     public Venue VenueNavigation { get; set; } = null!;
 
     public ICollection<EmployeeSchedule> Schedules { get; set; } = new List<EmployeeSchedule>();
-
-    public bool IsDeleted { get; private set; }
-    public DateTime? DeletedAt { get; private set; }
-    public void SoftDelete()
-    {
-        IsDeleted = true;
-        DeletedAt = DateTime.UtcNow;
-    }
 }

@@ -19,7 +19,10 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.Entity<BaseEntity>() 
+                .UseTpcMappingStrategy()
+                .HasQueryFilter(b => !b.IsDeleted); ;
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Employee).Assembly);
         modelBuilder.Entity<BaseEntity>()
             .Property(b => b.Timestamp)
             .IsRowVersion();
