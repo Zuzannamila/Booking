@@ -26,31 +26,72 @@ namespace Booking.Dal.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(95);
 
                     b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(97);
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnOrder(98);
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("rowversion")
+                        .HasColumnOrder(99);
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(96);
 
                     b.HasKey("Id");
 
                     b.ToTable((string)null);
 
                     b.UseTpcMappingStrategy();
+                });
+
+            modelBuilder.Entity("Booking.Models.Entities.ServiceCategory", b =>
+                {
+                    b.Property<short>("Id")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ServiceCategories", "dbo");
+                });
+
+            modelBuilder.Entity("Booking.Models.Entities.ServiceSubCategory", b =>
+                {
+                    b.Property<short>("Id")
+                        .HasColumnType("smallint");
+
+                    b.Property<short>("CategoryId")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("ServiceSubCategories", "dbo");
                 });
 
             modelBuilder.Entity("Booking.Models.Entities.Client", b =>
@@ -60,16 +101,19 @@ namespace Booking.Dal.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(320)
-                        .HasColumnType("nvarchar(320)");
+                        .HasColumnType("nvarchar(320)")
+                        .HasColumnOrder(1);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(2);
 
                     b.Property<string>("LastName")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(3);
 
                     b.HasIndex("Email")
                         .IsUnique()
@@ -78,52 +122,82 @@ namespace Booking.Dal.Migrations
                     b.ToTable("Clients", "dbo");
                 });
 
-            modelBuilder.Entity("Booking.Models.Entities.Employee", b =>
+            modelBuilder.Entity("Booking.Models.Entities.Photo", b =>
+                {
+                    b.HasBaseType("Booking.Models.Entities.BaseEntity");
+
+                    b.Property<string>("BlobKey")
+                        .IsRequired()
+                        .HasMaxLength(320)
+                        .HasColumnType("nvarchar(320)")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(2);
+
+                    b.Property<int?>("Height")
+                        .HasColumnType("int")
+                        .HasColumnOrder(3);
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("bit")
+                        .HasColumnOrder(4);
+
+                    b.Property<string>("MediumKey")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(5);
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(6);
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(7);
+
+                    b.Property<byte>("OwnerType")
+                        .HasColumnType("tinyint")
+                        .HasColumnOrder(8);
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int")
+                        .HasColumnOrder(9);
+
+                    b.Property<string>("ThumbKey")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(10);
+
+                    b.Property<int?>("Width")
+                        .HasColumnType("int")
+                        .HasColumnOrder(11);
+
+                    b.ToTable("Photos", "dbo");
+                });
+
+            modelBuilder.Entity("Booking.Models.Entities.Professional", b =>
                 {
                     b.HasBaseType("Booking.Models.Entities.BaseEntity");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(1);
 
-                    b.Property<string>("PhotoUrl")
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
-
-                    b.Property<Guid>("VenueId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid?>("VenueId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
 
                     b.HasIndex("VenueId");
 
-                    b.ToTable("Employees", "dbo");
-                });
-
-            modelBuilder.Entity("Booking.Models.Entities.Service", b =>
-                {
-                    b.HasBaseType("Booking.Models.Entities.BaseEntity");
-
-                    b.Property<string>("Category")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<TimeSpan>("Duration")
-                        .HasColumnType("time");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("VenueId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("VenueId");
-
-                    b.ToTable("Services", "dbo");
+                    b.ToTable("Professionals", "dbo");
                 });
 
             modelBuilder.Entity("Booking.Models.Entities.Venue", b =>
@@ -131,15 +205,18 @@ namespace Booking.Dal.Migrations
                     b.HasBaseType("Booking.Models.Entities.BaseEntity");
 
                     b.Property<double>("Latitude")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnOrder(1);
 
                     b.Property<double>("Longitude")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnOrder(2);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(3);
 
                     b.ToTable("Venues", "dbo");
                 });
@@ -149,48 +226,69 @@ namespace Booking.Dal.Migrations
                     b.HasBaseType("Booking.Models.Entities.BaseEntity");
 
                     b.Property<Guid>("ClientId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("EmployeeId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
 
                     b.Property<DateTimeOffset>("End")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid?>("ProfessionalId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(3);
 
                     b.Property<Guid>("ServiceId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(4);
+
+                    b.Property<string>("ServiceNameSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(5);
 
                     b.Property<DateTimeOffset>("Start")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(6);
 
                     b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("tinyint")
+                        .HasColumnOrder(7);
 
                     b.Property<Guid>("VenueId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(8);
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("ServiceId");
+                    b.HasIndex("ProfessionalId");
 
                     b.HasIndex("VenueId");
 
                     b.ToTable("Visits", "dbo");
                 });
 
-            modelBuilder.Entity("Booking.Models.Entities.Employee", b =>
+            modelBuilder.Entity("Booking.Models.Entities.ServiceSubCategory", b =>
                 {
-                    b.HasOne("Booking.Models.Entities.Venue", "VenueNavigation")
-                        .WithMany("Employees")
-                        .HasForeignKey("VenueId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Booking.Models.Entities.ServiceCategory", "CategoryNavigation")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.OwnsMany("Booking.Models.Entities.Owned.EmployeeSchedule", "Schedules", b1 =>
+                    b.Navigation("CategoryNavigation");
+                });
+
+            modelBuilder.Entity("Booking.Models.Entities.Professional", b =>
+                {
+                    b.HasOne("Booking.Models.Entities.Venue", "VenueNavigation")
+                        .WithMany("Professionals")
+                        .HasForeignKey("VenueId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.OwnsMany("Booking.Models.Entities.Owned.OpeningHours", "Schedules", b1 =>
                         {
-                            b1.Property<Guid>("EmployeeId")
+                            b1.Property<Guid>("ProfessionalId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<int>("Id")
@@ -199,53 +297,24 @@ namespace Booking.Dal.Migrations
 
                             SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
 
-                            b1.HasKey("EmployeeId", "Id");
+                            b1.Property<int>("Day")
+                                .HasColumnType("int");
 
-                            b1.ToTable("EmployeeSchedules", "dbo");
+                            b1.Property<TimeSpan>("End")
+                                .HasColumnType("time");
+
+                            b1.Property<TimeSpan>("Start")
+                                .HasColumnType("time");
+
+                            b1.HasKey("ProfessionalId", "Id");
+
+                            b1.ToTable("ProfessionalSchedules", "dbo");
 
                             b1.WithOwner()
-                                .HasForeignKey("EmployeeId");
-
-                            b1.OwnsOne("Booking.Models.Entities.Owned.OpeningHours", "Availability", b2 =>
-                                {
-                                    b2.Property<Guid>("EmployeeScheduleEmployeeId")
-                                        .HasColumnType("uniqueidentifier");
-
-                                    b2.Property<int>("EmployeeScheduleId")
-                                        .HasColumnType("int");
-
-                                    b2.Property<int>("Day")
-                                        .HasColumnType("int");
-
-                                    b2.Property<TimeSpan>("End")
-                                        .HasColumnType("time");
-
-                                    b2.Property<TimeSpan>("Start")
-                                        .HasColumnType("time");
-
-                                    b2.HasKey("EmployeeScheduleEmployeeId", "EmployeeScheduleId");
-
-                                    b2.ToTable("EmployeeSchedules", "dbo");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("EmployeeScheduleEmployeeId", "EmployeeScheduleId");
-                                });
-
-                            b1.Navigation("Availability");
+                                .HasForeignKey("ProfessionalId");
                         });
 
                     b.Navigation("Schedules");
-
-                    b.Navigation("VenueNavigation");
-                });
-
-            modelBuilder.Entity("Booking.Models.Entities.Service", b =>
-                {
-                    b.HasOne("Booking.Models.Entities.Venue", "VenueNavigation")
-                        .WithMany("Services")
-                        .HasForeignKey("VenueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("VenueNavigation");
                 });
@@ -260,29 +329,43 @@ namespace Booking.Dal.Migrations
                             b1.Property<string>("City")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("City")
+                                .HasColumnOrder(82);
 
                             b1.Property<string>("Country")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("Country")
+                                .HasColumnOrder(85);
 
                             b1.Property<string>("PostalCode")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("PostCode")
+                                .HasColumnOrder(83);
 
-                            b1.Property<string>("StateOrProvince")
+                            b1.Property<string>("Province")
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("Province")
+                                .HasColumnOrder(84);
 
                             b1.Property<string>("Street")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("Street")
+                                .HasColumnOrder(80);
 
-                            b1.Property<int>("Unit")
-                                .HasColumnType("int");
+                            b1.Property<string>("Unit")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("Unit")
+                                .HasColumnOrder(81);
 
                             b1.Property<byte[]>("_TableSharingConcurrencyTokenConvention_Timestamp")
                                 .IsConcurrencyToken()
@@ -299,7 +382,7 @@ namespace Booking.Dal.Migrations
                                 .HasForeignKey("VenueId");
                         });
 
-                    b.OwnsMany("Booking.Models.Entities.Owned.VenuePhoto", "VenuePhotos", b1 =>
+                    b.OwnsMany("Booking.Models.Entities.Owned.Service", "Services", b1 =>
                         {
                             b1.Property<Guid>("VenueId")
                                 .HasColumnType("uniqueidentifier");
@@ -310,28 +393,47 @@ namespace Booking.Dal.Migrations
 
                             SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
 
-                            b1.Property<string>("AltText")
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                            b1.Property<short?>("CategoryId")
+                                .HasColumnType("smallint");
 
-                            b1.Property<string>("Caption")
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                            b1.Property<TimeSpan>("Duration")
+                                .HasColumnType("time");
 
-                            b1.Property<int>("SortOrder")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("Url")
+                            b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)");
+
+                            b1.Property<decimal>("Price")
+                                .HasColumnType("decimal(18,2)");
+
+                            b1.Property<short?>("SubCategoryId")
+                                .HasColumnType("smallint");
 
                             b1.HasKey("VenueId", "Id");
 
-                            b1.ToTable("Photos", "dbo");
+                            b1.HasIndex("CategoryId");
+
+                            b1.HasIndex("SubCategoryId");
+
+                            b1.ToTable("VenueServices", "dbo");
+
+                            b1.HasOne("Booking.Models.Entities.ServiceCategory", "CategoryNavigation")
+                                .WithMany()
+                                .HasForeignKey("CategoryId")
+                                .OnDelete(DeleteBehavior.Restrict);
+
+                            b1.HasOne("Booking.Models.Entities.ServiceSubCategory", "SubCategoryNavigation")
+                                .WithMany()
+                                .HasForeignKey("SubCategoryId")
+                                .OnDelete(DeleteBehavior.Restrict);
 
                             b1.WithOwner()
                                 .HasForeignKey("VenueId");
+
+                            b1.Navigation("CategoryNavigation");
+
+                            b1.Navigation("SubCategoryNavigation");
                         });
 
                     b.OwnsMany("Booking.Models.Entities.Owned.OpeningHours", "OpeningHours", b1 =>
@@ -356,7 +458,7 @@ namespace Booking.Dal.Migrations
 
                             b1.HasKey("VenueId", "Id");
 
-                            b1.ToTable("OpeningHours", "dbo");
+                            b1.ToTable("VenueOpeningHours", "dbo");
 
                             b1.WithOwner()
                                 .HasForeignKey("VenueId");
@@ -367,7 +469,7 @@ namespace Booking.Dal.Migrations
 
                     b.Navigation("OpeningHours");
 
-                    b.Navigation("VenuePhotos");
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("Booking.Models.Entities.Visit", b =>
@@ -378,16 +480,10 @@ namespace Booking.Dal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Booking.Models.Entities.Employee", "EmployeeNavigation")
+                    b.HasOne("Booking.Models.Entities.Professional", "ProfessionalNavigation")
                         .WithMany()
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("ProfessionalId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Booking.Models.Entities.Service", "ServiceNavigation")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
 
                     b.HasOne("Booking.Models.Entities.Venue", "VenueNavigation")
                         .WithMany()
@@ -397,18 +493,19 @@ namespace Booking.Dal.Migrations
 
                     b.Navigation("ClientNavigation");
 
-                    b.Navigation("EmployeeNavigation");
-
-                    b.Navigation("ServiceNavigation");
+                    b.Navigation("ProfessionalNavigation");
 
                     b.Navigation("VenueNavigation");
                 });
 
+            modelBuilder.Entity("Booking.Models.Entities.ServiceCategory", b =>
+                {
+                    b.Navigation("SubCategories");
+                });
+
             modelBuilder.Entity("Booking.Models.Entities.Venue", b =>
                 {
-                    b.Navigation("Employees");
-
-                    b.Navigation("Services");
+                    b.Navigation("Professionals");
                 });
 #pragma warning restore 612, 618
         }

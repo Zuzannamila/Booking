@@ -8,13 +8,9 @@ public class VisitConfiguration : IEntityTypeConfiguration<Visit>
             .WithMany()
             .HasForeignKey(b => b.VenueId)
             .OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(b => b.ServiceNavigation)
+        builder.HasOne(b => b.ProfessionalNavigation)
             .WithMany()
-            .HasForeignKey(b => b.ServiceId)
-            .OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(b => b.EmployeeNavigation)
-            .WithMany()
-            .HasForeignKey(b => b.EmployeeId)
+            .HasForeignKey(b => b.ProfessionalId)
             .OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(b => b.ClientNavigation)
             .WithMany()

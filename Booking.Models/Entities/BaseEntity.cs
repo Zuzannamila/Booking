@@ -10,7 +10,7 @@ public abstract class BaseEntity
     public void SoftDelete()
     {
         IsDeleted = true;
-        DeletedAt = DateTime.UtcNow;
+        DeletedAt = DateTimeOffset.UtcNow;
     }
     [Timestamp]
     public byte[] Timestamp { get; set; } = null!;

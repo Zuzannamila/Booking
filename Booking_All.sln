@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Booking.Dal\appsettings.json = Booking.Dal\appsettings.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Dal.Tests", "Booking.Dal.Tests\Booking.Dal.Tests.csproj", "{DFE05E69-E4D5-4064-9B0E-37A4E550BE06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D6528E56-0A1B-41F5-9F47-B0CD3903A216}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6528E56-0A1B-41F5-9F47-B0CD3903A216}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6528E56-0A1B-41F5-9F47-B0CD3903A216}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFE05E69-E4D5-4064-9B0E-37A4E550BE06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFE05E69-E4D5-4064-9B0E-37A4E550BE06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFE05E69-E4D5-4064-9B0E-37A4E550BE06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFE05E69-E4D5-4064-9B0E-37A4E550BE06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

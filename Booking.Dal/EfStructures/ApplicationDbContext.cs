@@ -9,24 +9,48 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-   public virtual DbSet<Visit> Visits { get; set; }
+    public virtual DbSet<Visit> Visits { get; set; }
     public virtual DbSet<Client> Clients { get; set; }
-    public virtual DbSet<Employee> Employees { get; set; }
-    public virtual DbSet<Service> Services { get; set; }
+    public virtual DbSet<Professional> Professionals { get; set; }
     public virtual DbSet<Venue> Venues { get; set; }
-
+    public virtual DbSet<ServiceCategory> ServiceCategories { get; set; }
+    public virtual DbSet<ServiceSubCategory> ServiceSubCategories { get; set; }
+    public virtual DbSet<Photo> Photos { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<BaseEntity>() 
-                .UseTpcMappingStrategy()
-                .HasQueryFilter(b => !b.IsDeleted); ;
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Employee).Assembly);
         modelBuilder.Entity<BaseEntity>()
-            .Property(b => b.Timestamp)
-            .IsRowVersion();
+                .UseTpcMappingStrategy()
+                .HasQueryFilter(b => !b.IsDeleted)
+                .Property(b => b.Timestamp)
+                .IsRowVersion();
+        modelBuilder.Entity<ServiceCategory>()
+            .Property(x => x.Id)
+            .ValueGeneratedNever();
+
+        foreach (var entity in modelBuilder.Model.GetEntityTypes()
+           .Where(et => typeof(BaseEntity).IsAssignableFrom(et.ClrType) && !et.IsAbstract() && !et.IsOwned()))
+        {
+            var b = modelBuilder.Entity(entity.ClrType);
+
+            b.Property(nameof(BaseEntity.Id)).HasColumnOrder(0);
+
+            int order = 1;
+            foreach (var prop in b.Metadata.GetProperties().Where(p => p.PropertyInfo?.DeclaringType == entity.ClrType))
+            {
+                b.Property(prop.Name).HasColumnOrder(order++);
+            }
+
+            const int auditStart = 95;
+            b.Property(nameof(BaseEntity.CreatedAt)).HasColumnOrder(auditStart);
+            b.Property(nameof(BaseEntity.UpdatedAt)).HasColumnOrder(auditStart + 1);
+            b.Property(nameof(BaseEntity.DeletedAt)).HasColumnOrder(auditStart + 2);
+            b.Property(nameof(BaseEntity.IsDeleted)).HasColumnOrder(auditStart + 3);
+            b.Property(nameof(BaseEntity.Timestamp)).HasColumnOrder(auditStart + 4);
+        }
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Professional).Assembly);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
